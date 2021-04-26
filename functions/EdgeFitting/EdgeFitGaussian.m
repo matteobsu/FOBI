@@ -2,7 +2,7 @@ function [pos,wid,h] = EdgeFitGaussian(signal,spectrum,spectrum_range,est_p,est_
 %EDGEGAUSSIAN Summary of this function goes here
 %   Detailed explanation goes here
 if(nargin<10)
-    pr=1
+    pr=1;
 end
 %% prepare data
 d_spectrum = spectrum(1:end-1);

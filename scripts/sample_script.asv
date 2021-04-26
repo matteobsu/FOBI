@@ -1,0 +1,23 @@
+clear all
+close all
+
+%% 1 Sort data from MCP and perform overlap correction, please place all the files from the same acquisition (e.g. OpenBeam,Sample1,...) in a folder
+maindir = 'OpenBeam'; %path to folder
+nfiles = 1400; %number of files per repetition (including txt). Useful so the function will check that there was no issues
+PathTpxCorr = 'C:\Users\busi_m\Desktop\Tremsin_overlap_Program-ANDBatchCreator\TPX_CubeRead.exe';
+SortDataMcp(maindir,nfiles,PathTpxCorr);
+%when this is done a batch file for the overlap correction will be written,
+%please run it from the command prompt of windows (windows+r cmd)
+
+%% 2 Merge Data
+maindir = 'OpenBeam';%path to folder
+saveid = 'OpenBeam';
+Nbins = 1500; %numberofbins
+frq = 25; %chopper frequency
+reps = [1:9]; % select folders (start with all)
+test = 1; %we first check the datasets in case we need to discard some
+MergeDataMcp(maindir,Nbins,reps,test,frq)
+
+reps = [1:9]; % select folders from the test
+test = 0; % now we merge and save file
+MergeDataMcp(maindir,Nbins,reps,test,frq)
