@@ -27,7 +27,9 @@ options.StartPoint = [est_h,est_p,est_w];
 %% fit
 f = fit(x.',y.','gauss1',options);
 if(pr)
-    figure, plot(f,x,y)
+    figure, 
+    subplot(2,1,1), plot(f,x,y)
+    subplot(2,1,2), plot(spectrum(1:end-1),signal(1:end-1))
 end
 pos = f.b1;
 wid = f.c1;
