@@ -5,6 +5,7 @@ load OB.mat; I0 = I; %path to open beam
 load AlSiC.mat %path to Sample
 load AlSiC_spectrum_tof.mat %path to time-of-flight (or lambda after calibration) spectrum
 
+%% cropping out POLDI blind spots
 I([1:150 400:end],:,:)=[];
 I0([1:150 400:end],:,:)=[];
 %% FOBI reduction 
@@ -12,27 +13,28 @@ I0([1:150 400:end],:,:)=[];
 % can either select your region from the code and use FobiWiener, or use
 % FobiWienerRoipoly and select region from figure
 t=spectrum_tof;
-tmax= 0.03;
+tmax= 0.03;% for POLDI
 nrep= 4;% for POLDI
 ChopperId = 'POLDI';
 c= 1e-1; %Wiener constant\
 flag_smooth=1;
-roll = 165; 
+roll = 165; %will shift the spectra so that it is re-centered
 
 FobiWienerRoipoly(I,I0,t,tmax,nrep,ChopperId,c,flag_smooth,roll)
 
-size_x = 100;
-size_y = 20;
-K = ones(size_x,size_y,1);
-K = K./sum(K(:));
-I0_filter = convn(I0,K,'same');
-I_filter = convn(I,K,'same');
+%% applying here moving average
+kernel = [100,20];
+I0_filter = DataFiltering(I0,kernel,'movingaverage');
+I_filter = DataFiltering(I,kernel,'movingaverage');
 
-figure, imagesc(nanmean(I_filter,3))
-figure, imagesc(nanmean(I,3))
-
-% y=nan sample spectrum
-% y0= open beam spectrum
+figure, 
+subplot(1,2,1), imagesc(nanmean(I,3)), title('Raw')
+subplot(1,2,2), imagesc(nanmean(I_filter,3)), title('Filtered')
+%%
+% region_x = 100:200;
+% region_y = 100:200;
+% y=squeeze(nanmean(nanmean(I_filter(region_x,region_y,:),2),1)); %,nan sample spectrum
+% y0=squeeze(nanmean(nanmean(I0_filter(region_x,region_y,:),2),1)); %open beam spectrum
 % FobiWiener(y,y0,t,tmax,nrep,ChopperId,c,flag_smooth,roll)
 
 % then you can perform it for the 2D ToF images stacks.
