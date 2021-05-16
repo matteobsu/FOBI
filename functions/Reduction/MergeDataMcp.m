@@ -5,18 +5,23 @@ if(test==1)
     tof = zeros(512,512,length(reps));
     j = 10;
     z=0;
+    counts = 0;
     for i=reps
         z=z+1;
         sdir = dir(fullfile([id '/' num2str(i) '/Corrected/'],'*.fits'));
         txts = dir(fullfile([id '/' num2str(i) filesep],'*.txt'));
         shutcounts_txt = load([txts(1).folder filesep txts(1).name]);
-        counts = shutcounts_txt(1,2);
-        tof(:,:,z) = fitsread([sdir(j).folder filesep sdir(j).name])/(counts/frq);
+        counts = counts + shutcounts_txt(1,2);
+        spectrum_txt = load([txts(3).folder filesep txts(3).name]);
+        tof(:,:,z) = fitsread([sdir(j).folder filesep sdir(j).name]);
         figure, imagesc(tof(:,:,z)), colorbar, title(['Rep ' num2str(i)])
+        figure(199), plot(spectrum_txt(:,1),spectrum_txt(:,2)), hold on
     end
-    I = nanmean(tof,3);
+    legend, grid, title('Uncorrected spectra')
+    Slicer(tof)
+    I = nansum(tof,3)*frq/counts;
     figure, imagesc(I), colorbar, title('Merged Frame')
-    figure, plot(squeeze(nanmean(nanmean(tof,2),1))), title('Total counts vs rep')
+    figure, plot(squeeze(nanmean(nanmean(tof,2),1)),'-x'), title('Total counts vs rep'), grid
 end
 
 if(test==0)
@@ -25,19 +30,20 @@ if(test==0)
         disp(['Merging ToF #' num2str(j)])
         z=0;
         tof = zeros(512,512,length(reps));
+        counts = 0;
         for i=reps
             z=z+1;
             sdir = dir(fullfile([id '/' num2str(i) '/Corrected/'],'*.fits'));
             txts = dir(fullfile([id '/' num2str(i) filesep],'*.txt'));
             shutcounts_txt = load([txts(1).folder filesep txts(1).name]);
+            counts = counts + shutcounts_txt(1,2);
             if(z==1)
                 spectrum_tof = load([txts(3).folder filesep txts(3).name]);
                 spectrum_tof = spectrum_tof(:,1);
             end
-            counts = shutcounts_txt(1,2);
-            tof(:,:,z) = fitsread([sdir(j).folder filesep sdir(j).name])/(counts/frq);
+            tof(:,:,z) = fitsread([sdir(j).folder filesep sdir(j).name]);
         end
-        I(:,:,j) = nanmean(tof,3);
+        I(:,:,j) = nansum(tof,3)*frq/counts;
         clear tof
     end
     save([saveid '.mat'],'I')

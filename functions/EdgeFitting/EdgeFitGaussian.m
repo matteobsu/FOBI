@@ -29,7 +29,7 @@ f = fit(x.',y.','gauss1',options);
 if(pr)
     figure, 
     subplot(2,1,1), plot(f,x,y)
-    subplot(2,1,2), plot(spectrum(1:end-1),signal(1:end-1))
+    subplot(2,1,2), plot(x,signal(find_nearest(d_spectrum,spectrum_range(1)):find_nearest(d_spectrum,spectrum_range(2))))
 end
 pos = f.b1;
 wid = f.c1;

@@ -19,7 +19,7 @@ y_overlap = zeros(replen,nrep);
 for i=1:nrep
     y_overlap(:,i) = y_int(replen*(i-1)+1:replen*i);
 end
-y_merged = nanmedian(y_overlap,2);
+y_merged = nanmean(y_overlap,2);
 y_extended = y_merged;
 for i=1:nrep-1
     y_extended = [y_extended; y_merged];

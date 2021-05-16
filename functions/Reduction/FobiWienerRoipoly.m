@@ -37,6 +37,7 @@ end
 y0rec = wiener_deconvolution(y0,D,c);
 yrec = wiener_deconvolution(y,D,c);
 Trec = yrec./y0rec;
+% Trec =  wiener_deconvolution(y./y0,D,c);
 
 replen = length(y)/nrep;
 for i=1:nrep

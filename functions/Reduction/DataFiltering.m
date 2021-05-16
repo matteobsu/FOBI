@@ -1,7 +1,7 @@
 function [imageflt] = DataFiltering(image,kernel,kerneltype)
 %DATAFILTERING Summary of this function goes here
 %   Detailed explanation goes here
-if(dim(kernel)==2)
+if(numel(kernel)==2)
     imageflt=zeros(size(image));
 	switch kerneltype
         case 'movingaverage'
@@ -21,7 +21,7 @@ if(dim(kernel)==2)
     end
 end
 
-if(dim(kernel)==3)
+if(numel(kernel)==3)
 	switch kerneltype
         case 'movingaverage'
             K = ones(kernel(1),kernel(2),kernel(3));
