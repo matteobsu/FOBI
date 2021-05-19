@@ -1,16 +1,17 @@
 function [TL2,yL2,y0L2,t_merged] = FobiRegTools2D(I,I0,t,tmax,nrep,ChopperId,lambda,flag_smooth,roll)
 %FULL_FOB_REDUCTION Summary of this function goes here
 %   Detailed explanation goes here
-siz = size(I);
-if nargin<9
+if exist('roll','var') == 0
     roll=0;
-    if nargin<8
-        flag_smooth=0;
-        if(nargin<7)
-            lambda = 0.5;
-        end
-    end
 end
+if exist('flag_smooth','var') == 0
+    flag_smooth=0;
+end
+if exist('lambda','var') == 0
+    lambda = 0.5;
+end
+
+siz = size(I);
 % y = squeeze(I(round(siz(1)/2),round(siz(2)/2),:));
 y0 = squeeze(I0(round(siz(1)/2),round(siz(2)/2),:));
 % [y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);

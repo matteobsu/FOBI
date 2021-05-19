@@ -1,4 +1,4 @@
-function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tmax,nrep,ChopperId,c,flag_smooth,roll)
+function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWienerRoi(I,I0,t,tmax,nrep,ChopperId,c,flag_smooth,roll,roi)
 %FULL_FOB_REDUCTION Summary of this function goes here
 %   Detailed explanation goes here
 if exist('roll','var') == 0
@@ -11,9 +11,10 @@ if exist('c','var') == 0
     c = 0.1;
 end
 
-pr = 0;
-[y0,tn] = interpolate_noreadoutgaps(y0,t,tmax,nrep,pr);
-[y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,pr);
+y0 = SpectrumRoi(I0,roi);
+y = SpectrumRoi(I,roi);
+[y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
+[y0,tn] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
 %% choose time delays
 switch ChopperId
     case 'POLDI'
@@ -34,6 +35,7 @@ end
 y0rec = wiener_deconvolution(y0,D,c);
 yrec = wiener_deconvolution(y,D,c);
 Trec = yrec./y0rec;
+% Trec =  wiener_deconvolution(y./y0,D,c);
 
 replen = length(y)/nrep;
 for i=1:nrep
@@ -50,5 +52,11 @@ y0rec_merged = circshift(y0rec_merged,roll);
 Trec_merged = circshift(Trec_merged,roll);
 
 t_merged = tn(1:replen);
+
+figure,
+subplot(2,1,1), plot(t_merged,y0rec_merged), hold on, plot(t_merged,yrec_merged),
+legend('Open beam','Sample')
+subplot(2,1,2), plot(t_merged,Trec_merged),
+legend('Transmission')
 end
 

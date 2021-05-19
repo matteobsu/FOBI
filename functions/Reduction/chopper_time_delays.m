@@ -1,8 +1,9 @@
 function [D,angles] = chopper_time_delays(time,nslits,nrep,mode,rng)
 %TIME_DELAYS Summary of this function goes here
 %   Detailed explanation goes here
-if(nargin<4)
-    mode = 'even';
+
+if exist('mode','var') == 0
+    mode = 'pseudorandom';
 end
 
 Nt = length(time);

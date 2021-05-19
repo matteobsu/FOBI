@@ -1,16 +1,16 @@
 function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWienerRoipoly(I,I0,t,tmax,nrep,ChopperId,c,flag_smooth,roll)
 %FULL_FOB_REDUCTION Summary of this function goes here
 %   Detailed explanation goes here
-
-if nargin<9
+if exist('roll','var') == 0
     roll=0;
-    if nargin<8
-        flag_smooth=0;
-        if(nargin<7)
-            c = 0.1;
-        end
-    end
 end
+if exist('flag_smooth','var') == 0
+    flag_smooth=0;
+end
+if exist('c','var') == 0
+    c = 0.1;
+end
+
 figure, imagesc(nanmean(I,3)./nanmean(I0,3)), title('Transmission Image')
 roi = roipoly; 
 y0 = SpectrumRoi(I0,roi);

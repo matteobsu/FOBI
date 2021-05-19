@@ -1,8 +1,8 @@
 function [pos,wid,h] = EdgeFitGaussian(signal,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,pr)
 %EDGEGAUSSIAN Summary of this function goes here
 %   Detailed explanation goes here
-if(nargin<10)
-    pr=1;
+if exist('pr','var') == 0
+    pr=0;
 end
 %% prepare data
 d_spectrum = spectrum(1:end-1);

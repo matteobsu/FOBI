@@ -1,15 +1,16 @@
 function [TL2,yL2,y0L2,t_merged] = FobiRegTools(y,y0,t,tmax,nrep,ChopperId,lambda,flag_smooth,roll)
 %FULL_FOB_REDUCTION Summary of this function goes here
 %   Detailed explanation goes here
-if nargin<9
+if exist('roll','var') == 0
     roll=0;
-    if nargin<8
-        flag_smooth=0;
-        if(nargin<7)
-            lambda = 0.5;
-        end
-    end
 end
+if exist('flag_smooth','var') == 0
+    flag_smooth=0;
+end
+if exist('lambda','var') == 0
+    lambda = 0.5;
+end
+
 [y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
 [y0,tn] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
 %% choose time delays
