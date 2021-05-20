@@ -1,14 +1,14 @@
 function [edge_p,edge_w,edge_h] = EdgeFitGaussian2D(data,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,mask,test)
 %EDGEGAUSSIAN Summary of this function goes here
 %   Detailed explanation goes here
-if exist('radius','var') == 0
+s = size(data);
+if exist('test','var') == 0
     test=0;
 end
 if exist('mask','var') == 0
     mask=ones(s);
 end
 
-s = size(data);
 edge_p = zeros(s(1),s(2));
 edge_w = zeros(s(1),s(2));
 edge_h = zeros(s(1),s(2));

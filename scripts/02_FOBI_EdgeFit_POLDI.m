@@ -53,18 +53,15 @@ figure,
 subplot(1,2,1), imagesc(nanmean(T_fobi,3)), title('Raw'), axis equal tight, caxis([0 1])
 subplot(1,2,2), imagesc(nanmean(T_filter,3)), title('Filtered'), axis equal tight, caxis([0 1])
 %% Edge fitting
-signal = squeeze(T_filter(120,80,:)); %bragg pattern
-signal = signal;
-spectrum = t_merged; %tof or lambda spectrum
+testpixel = [120,100];
 spectrum_range =[1e-3 5e-3]; %restrict spectrum to a desired window
 est_p = 4.5e-3; %estimated position BC_p boundary conditions
 est_w = 4.4e-5; %estimated Bragg width BC_w boundary conditions
 est_h = 1e-2; %estimated Bragg height BC_h boundary conditions
-pr =1; % printing option
 BC_p = [4.2e-3 4.8e-3];
 BC_w = [0 1e-3];
 BC_h = [0 1e-1];
-[pos,w,h]=EdgeFitGaussian(signal,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,pr)
+[p1,w1,h1] = EdgeFitGaussian2D(T_fobi,t_merged,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,mask,testpixel);
 % after testing for a single spectrum go ahead and do it spatially
 % resolved:
 %%
