@@ -45,11 +45,18 @@ end
 yL2 = tikhonov(U,s,V,y,lambda);
 y0L2 = tikhonov(U,s,V,y0,lambda);
 TL2 = yL2./y0L2;
+%TL2 =  tikhonov(U,s,V,y./y0,lambda);
 
 yL2 = circshift(yL2,roll);
 y0L2 = circshift(y0L2,roll);
 TL2 = circshift(TL2,roll);
 
 t_merged = tn(1:n);
+
+figure,
+subplot(2,1,1), plot(t_merged,y0L2), hold on, plot(t_merged,yL2),
+legend('Open beam','Sample')
+subplot(2,1,2), plot(t_merged,TL2),
+legend('Transmission')
 end
 

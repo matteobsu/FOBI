@@ -1,4 +1,4 @@
-function [TL2,yL2,y0L2,t_merged] = FobiRegToolsRoipoly(y,y0,t,tmax,nrep,ChopperId,lambda,flag_smooth,roll)
+function [TL2,yL2,y0L2,t_merged] = FobiRegToolsRoipoly(I,I0,t,tmax,nrep,ChopperId,lambda,flag_smooth,roll)
 %FULL_FOB_REDUCTION Summary of this function goes here
 %   Detailed explanation goes here
 if exist('roll','var') == 0
