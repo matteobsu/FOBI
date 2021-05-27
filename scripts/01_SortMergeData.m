@@ -25,11 +25,11 @@ Nbins = 1431; %numberofbins
 frq = 33.33; %chopper frequency (2000rpm)
 reps = [1 4:5]; % select folders (start with all)
 test = 1; %we first check the datasets in case we need to discard some
-MergeDataMcp(maindir,Nbins,reps,test,frq,saveid)
+MergeDataMcp(maindir,Nbins,reps,test,frq,saveid);
 %%
 reps = [1:12]; % select folders from the test
 test = 0; % now we merge and save file
-MergeDataMcp(maindir,Nbins,reps,test,frq,saveid)
+[I,spectrum_tof] = MergeDataMcp(maindir,Nbins,reps,test,frq,saveid);
 
 %% NOTE: consider rebinning and cropping to POLDI FoV to speed-up further processing
 

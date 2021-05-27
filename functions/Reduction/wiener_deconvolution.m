@@ -1,6 +1,5 @@
-function [H] = wiener_deconvolution(f,g,c)
+function [H] = wiener_deconvolution(f,g,c,filter)
 %WIENER_DECONVOLUTION Summary of this function goes here
-%   Detailed explanation goes here
 %   Detailed explanation goes here
 if(nargin<4)
     filter = 'none';

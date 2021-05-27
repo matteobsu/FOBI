@@ -1,4 +1,4 @@
-function [] = MergeDataMcp(id,Nbins,reps,test,frq,saveid)
+function [I,spectrum_tof] = MergeDataMcp(id,Nbins,reps,test,frq,saveid)
 %MERGEDATAMCP Summary of this function goes here
 %   Detailed explanation goes here
 if(test==1)
@@ -14,14 +14,16 @@ if(test==1)
         counts = counts + shutcounts_txt(1,2);
         spectrum_txt = load([txts(3).folder filesep txts(3).name]);
         tof(:,:,z) = fitsread([sdir(j).folder filesep sdir(j).name]);
-        figure, imagesc(tof(:,:,z)), colorbar, title(['Rep ' num2str(i)])
+        figure, imagesc(tof(:,:,z)), colorbar, title(['Rep ' num2str(i) '. Shutter counts: ' num2str(counts)])
         figure(199), plot(spectrum_txt(:,1),spectrum_txt(:,2)), hold on
     end
     legend, grid, title('Uncorrected spectra')
-    Slicer(tof)
     I = nansum(tof,3)*frq/counts;
     figure, imagesc(I), colorbar, title('Merged Frame')
     figure, plot(squeeze(nanmean(nanmean(tof,2),1)),'-x'), title('Total counts vs rep'), grid
+    if reps>1
+        Slicer(tof)
+    end
 end
 
 if(test==0)
