@@ -13,7 +13,7 @@ if(numel(kernel)==2)
 	
         case 'gaussianblur'
             for ii=1:size(image,3)
-                imageflt(:,:,ii) = imgaussfilt(image(:,:,ii),kernel,'same');
+                imageflt(:,:,ii) = imgaussfilt(image(:,:,ii),kernel);
             end
             
         otherwise
@@ -29,7 +29,7 @@ if(numel(kernel)==3)
             imageflt = convn(image,K,'same');
 	
         case 'gaussianblur'
-            imageflt = imgaussfilt3(image,kernel,'same');
+            imageflt = imgaussfilt3(image,kernel);
             
         otherwise
         	disp('Wrong kernel, please select "movingaverage" or "gaussianblur"')
