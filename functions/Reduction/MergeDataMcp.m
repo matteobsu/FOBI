@@ -21,7 +21,7 @@ if(test==1)
     I = nansum(tof,3)*frq/counts;
     figure, imagesc(I), colorbar, title('Merged Frame')
     figure, plot(squeeze(nanmean(nanmean(tof,2),1)),'-x'), title('Total counts vs rep'), grid
-    if reps>1
+    if length(reps)>1
         Slicer(tof)
     end
 end

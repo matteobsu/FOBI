@@ -19,7 +19,7 @@ for i=1:reps
 end
 
 %making batch file
-fid = fopen('CorrectionBatch.bat','w');
+fid = fopen(['CorrectionBatch_' maindir '.bat'],'w');
 for i=1:reps
     fdir = dir(fullfile([maindir '/' num2str(i)],'*.fits'));
     string = [PathTpxCorr ' ' fdir(i).folder filesep fdir(1).name];
