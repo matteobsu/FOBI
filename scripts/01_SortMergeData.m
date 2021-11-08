@@ -8,7 +8,7 @@ close all
 % a new folder (there are no functions to unsort the data)
 
 %% 1 Sort data from MCP and perform overlap correction, please place all the files from the same acquisition (e.g. OpenBeam,Sample1,...) in a folder
-maindir = 'WAAM'; %path to folder
+maindir = 'Z:\02_rawdata\45_Florencia\DATA\Multimats_setup\'; %path to folder
 nfiles = 1436; %number of files per repetition (including txt). Useful so the function will check that there was no issues
 PathTpxCorr = 'C:\Users\busi_m\Desktop\Tremsin_overlap_Program-ANDBatchCreator\TPX_CubeRead.exe';
 SortDataMcp(maindir,nfiles,PathTpxCorr);
@@ -18,16 +18,17 @@ SortDataMcp(maindir,nfiles,PathTpxCorr);
 % it gets stuck after correcting first dataset
 
 %% 2 Merge Data
-% close all
-maindir = 'OB';%path to folder
-saveid = 'OB';
+close all
+maindir = 'Z:\02_rawdata\45_Florencia\DATA\Multimats_setup';%path to folder
+saveid = 'Multimats_setup';
 Nbins = 1431; %numberofbins
 frq = 33.33; %chopper frequency (2000rpm)
-reps = [1 4:5]; % select folders (start with all)
+reps = [1:14]; % select folders (start with all)
 test = 1; %we first check the datasets in case we need to discard some
 MergeDataMcp(maindir,Nbins,reps,test,frq,saveid);
 %%
-reps = [1:12]; % select folders from the test
+saveid = 'Multimats_setup';
+reps = [4:14]; % select folders from the test
 test = 0; % now we merge and save file
 [I,spectrum_tof] = MergeDataMcp(maindir,Nbins,reps,test,frq,saveid);
 
