@@ -4,7 +4,10 @@ function [spectrum] = SpectrumRoipoly(I,cax)
 if exist('cax','var') == 0
     cax = 0;
 end
-figure, imagesc(nanmean(I,3)), caxis(cax)
+figure, imagesc(nanmean(I,3)), 
+if(cax)
+caxis(cax)
+end
 
 roi = roipoly;
 spectrum = SpectrumRoi(I,roi);

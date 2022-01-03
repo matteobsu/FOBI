@@ -9,10 +9,10 @@ roi(roi==0)=nan;
 data = data.*repmat(roi,[1 1 size(data,3)]);
 for i=1:size(data,3)
     a = data(:,:,i);
-    if(method=='median') %#ok<ALIGN>
+    if(strcmp(method,'median')) %#ok<ALIGN>
         spectrum(i)=nanmedian(a(:));
     else
-    if(method=='mean')
+    if(strcmp(method,'mean'))
         spectrum(i)=nanmean(a(:));
     end
 end

@@ -23,12 +23,12 @@ maindir = 'Z:\02_rawdata\45_Florencia\DATA\Multimats_setup';%path to folder
 saveid = 'Multimats_setup';
 Nbins = 1431; %numberofbins
 frq = 33.33; %chopper frequency (2000rpm)
-reps = [1:14]; % select folders (start with all)
+reps = [1:11]; % select folders (start with all)
 test = 1; %we first check the datasets in case we need to discard some
 MergeDataMcp(maindir,Nbins,reps,test,frq,saveid);
 %%
 saveid = 'Multimats_setup';
-reps = [4:14]; % select folders from the test
+reps = [1:11]; % select folders from the test
 test = 0; % now we merge and save file
 [I,spectrum_tof] = MergeDataMcp(maindir,Nbins,reps,test,frq,saveid);
 
