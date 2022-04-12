@@ -11,7 +11,7 @@ if exist('c','var') == 0
     c = 0.1;
 end
 
-figure, imagesc(nanmean(I,3)./nanmean(I0,3)), title('Transmission Image')
+figure, imagesc(nanmean(I,3)./nanmean(I0,3)), title('Transmission Image'), caxis([0 1])
 roi = roipoly; 
 y0 = SpectrumRoi(I0,roi);
 y = SpectrumRoi(I,roi);
