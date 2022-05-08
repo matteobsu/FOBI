@@ -22,7 +22,7 @@ if(test==1)
     figure, imagesc(I), colorbar, title('Merged Frame')
     figure, plot(squeeze(nanmean(nanmean(tof,2),1)),'-x'), title('Total counts vs rep'), grid
     if length(reps)>1
-        Slicer(tof)
+        imshow3D(tof)
     end
 end
 
@@ -45,11 +45,12 @@ if(test==0)
             end
             tof(:,:,z) = fitsread([sdir(j).folder filesep sdir(j).name]);
         end
-        I(:,:,j) = nansum(tof,3)*frq/counts;
+        I(:,:,j) = nansum(tof,3)*frq;
         clear tof
     end
     save([saveid '.mat'],'I')
     save([saveid '_spectrum_tof.mat'],'spectrum_tof')
+    save([saveid '_shuttercounts.mat'],'counts')
     figure, imagesc(nanmean(I,3)), colorbar, title('Merged Frame')
 end
 
