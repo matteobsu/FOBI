@@ -1,4 +1,4 @@
-function [I,spectrum_tof] = MergeDataMcp(id,Nbins,reps,test,frq,saveid)
+function [I,spectrum_tof] = MergeDataMcp(id,Nbins,reps,test,saveid)
 %MERGEDATAMCP Summary of this function goes here
 %   Detailed explanation goes here
 if(test==1)
@@ -18,7 +18,7 @@ if(test==1)
         figure(199), plot(spectrum_txt(:,1),spectrum_txt(:,2)), hold on
     end
     legend, grid, title('Uncorrected spectra')
-    I = nansum(tof,3)*frq/counts;
+    I = nansum(tof,3);
     figure, imagesc(I), colorbar, title('Merged Frame')
     figure, plot(squeeze(nanmean(nanmean(tof,2),1)),'-x'), title('Total counts vs rep'), grid
     if length(reps)>1
@@ -45,7 +45,7 @@ if(test==0)
             end
             tof(:,:,z) = fitsread([sdir(j).folder filesep sdir(j).name]);
         end
-        I(:,:,j) = nansum(tof,3)*frq;
+        I(:,:,j) = nansum(tof,3);
         clear tof
     end
     save([saveid '.mat'],'I')
