@@ -2,7 +2,7 @@ function [spectrum,unc] = SpectrumRoi(data,roi,method)
 %ROI_SPECTRUM Summary of this function goes here
 %   Detailed explanation goes here
 if exist('method','var') == 0
-    method='median';
+    method='mean';
 end
 roi = double(roi);
 roi(roi==0)=nan;
