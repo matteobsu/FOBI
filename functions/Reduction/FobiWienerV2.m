@@ -11,11 +11,6 @@ if exist('c','var') == 0
     c = 0.1;
 end
 
-if(flag_smooth)
-    y = smooth(y);
-    y0 = smooth(y0);
-end
-
 pr = 0;
 [y0,tn] = interpolate_noreadoutgaps(y0,t,tmax,nrep,pr);
 [y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,pr);
@@ -31,17 +26,28 @@ switch ChopperId
         disp('Please select chopper')
 end
 %%
+if(flag_smooth)
+    y = smooth(y);
+    y0 = smooth(y0);
+end
 
 y0rec = wiener_deconvolution(y0,D,c);
 yrec = wiener_deconvolution(y,D,c);
-% Trec = yrec./y0rec;
-Trec = wiener_deconvolution(y./y0rec,D,c);
+Trec = yrec./y0rec;
 
 replen = length(y)/nrep;
+for i=1:nrep
+    yover(:,i) = yrec(replen*(i-1)+1:replen*i);
+    y0over(:,i) = y0rec(replen*(i-1)+1:replen*i);
+    Tover(:,i) = Trec(replen*(i-1)+1:replen*i);
+end
+yrec_merged = nanmean(yover,2);
+y0rec_merged = nanmean(y0over,2);
+Trec_merged = nanmean(Tover,2);
 
-yrec_merged = circshift(yrec(1:replen),roll);
-y0rec_merged = circshift(y0rec(1:replen),roll);
-Trec_merged = circshift(Trec(1:replen),roll);
+yrec_merged = circshift(yrec_merged,roll);
+y0rec_merged = circshift(y0rec_merged,roll);
+Trec_merged = circshift(Trec_merged,roll);
 
 t_merged = tn(1:replen);
 end

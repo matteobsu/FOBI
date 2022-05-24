@@ -34,10 +34,17 @@ end
 
 y0rec = wiener_deconvolution(y0,D,c);
 yrec = wiener_deconvolution(y,D,c);
-Trec = yrec./y0rec;
 % Trec =  wiener_deconvolution(y./y0,D,c);
 
-replen = length(y)/nrep;
+% l0 = size(y0,1);
+% l1 = size(y0rec,1);
+% 
+% y0rec = imresize(y0rec,l0/l1);
+% yrec = imresize(yrec,l0/l1);
+
+Trec = yrec./y0rec;
+
+replen = length(y0rec)/nrep;
 for i=1:nrep
     yover(:,i) = yrec(replen*(i-1)+1:replen*i);
     y0over(:,i) = y0rec(replen*(i-1)+1:replen*i);
@@ -53,7 +60,7 @@ Trec_merged = circshift(Trec_merged,roll);
 
 t_merged = tn(1:replen);
 
-figure,
+figure(888),
 subplot(2,1,1), plot(t_merged,y0rec_merged), hold on, plot(t_merged,yrec_merged),
 legend('Open beam','Sample')
 subplot(2,1,2), plot(t_merged,Trec_merged),

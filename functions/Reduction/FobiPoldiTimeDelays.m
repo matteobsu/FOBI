@@ -15,5 +15,6 @@ for i = 1:length(shifts)
     D(sfloor) = 1-rest;
     D(sfloor+1) = rest;
 end
+D = imgaussfilt(D,'Padding','circular');
 end
 
