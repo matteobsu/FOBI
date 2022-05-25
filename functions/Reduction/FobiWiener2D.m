@@ -12,20 +12,21 @@ if exist('c','var') == 0
 end
 
 siz = size(I);
-% y = squeeze(I(round(siz(1)/2),round(siz(2)/2),:));
 y0 = squeeze(I0(round(siz(1)/2),round(siz(2)/2),:));
-% [y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
-[~,tn] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
+[~,t_merged] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
 %% choose time delays
 switch ChopperId
-    case 'POLDI'
-        D = FobiPoldiTimeDelays(tn);
-    case '4x10'
-        D = Fobi4x10TimeDelays(tn);
-    case '5x8'
-        D = Fobi5x8TimeDelays(tn);
-    otherwise 
-        disp('Please select chopper')
+case 'POLDI'
+    D = FobiPoldiTimeDelays(t_merged);
+    nslits = 8;
+case '4x10'
+    D = Fobi4x10TimeDelays(t_merged);
+    nslits = 10;
+case '5x8'
+    D = Fobi5x8TimeDelays(t_merged);
+    nslits = 8;
+otherwise 
+    disp('Please select chopper')
 end
 %%
 
@@ -33,38 +34,31 @@ for i=1:siz(1)
     disp(['FOBI reduction of row:' num2str(i) '/' num2str(siz(1))])
     for j=1:siz(2)
         y = squeeze(I(i,j,:));
-        y0 = squeeze(I0(i,j,:));
-		[y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
-		[y0,tn] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
+        y0 = squeeze(I0(i,j,:));    
+        
+        method = 'rlowess';
+        sp = 0.0025;
         if(flag_smooth)
-			y = smooth(y);
-			y0 = smooth(y0);
-		end
-
-        y0rec = wiener_deconvolution(y0,D,c);
-        yrec = wiener_deconvolution(y,D,c);
-        Trec = yrec./y0rec;
-
-        replen = length(y)/nrep;
-        for ii=1:nrep
-            yover(:,ii) = yrec(replen*(ii-1)+1:replen*ii);
-            y0over(:,ii) = y0rec(replen*(ii-1)+1:replen*ii);
-            Tover(:,ii) = Trec(replen*(ii-1)+1:replen*ii);
+            y = smooth(y,sp,method);
+            y0 = smooth(y0,sp,method);
         end
-        yrec_merged = nanmean(yover,2);
-        y0rec_merged = nanmean(y0over,2);
-        Trec_merged = nanmean(Tover,2);
 
-        yrec_merged = circshift(yrec_merged,roll);
-        y0rec_merged = circshift(y0rec_merged,roll);
-        Trec_merged = circshift(Trec_merged,roll);
+		[y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
+		[y0,~] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
+
+        yrec = nslits*nrep*wiener_deconvolution(y,D,c);
+        y0rec = nslits*nrep*wiener_deconvolution(y0,D,c);
+        % Trec = yrec./y0rec; %direct T deconvolution seems to give heigher edges
+        Trec = nslits*wiener_deconvolution(y./y0,D,c);
+        yrec_merged = circshift(yrec,roll);
+        y0rec_merged = circshift(y0rec,roll);
+        Trec_merged = circshift(Trec,roll);
 
         T(i,j,:)=Trec_merged;
         y_rec(i,j,:)=yrec_merged;
         y0_rec(i,j,:)=y0rec_merged;
     end
 end
-t_merged = tn(1:replen);
 
 end
 

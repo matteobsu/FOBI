@@ -17,11 +17,13 @@ end
 %% Correlation theorem
 F = fft(f); 
 G = fft(g); 
-arg = F.*conj(G)./((abs(G).^2)+c); 
+
+arg = F.*conj(G)./((abs(G).^2)+c);  
+
+%complexplot((F)); 
+% complexplot((G));
 % complexplot(arg);
-% complexplot(fftshift(F)); 
-% complexplot(fftshift(G));
-% complexplot(arg);
+% complexplot(fftshift(arg));
 %%
 switch filter
     case 'central' 

@@ -1,4 +1,4 @@
-function [image_out,spectrum_out] = tof_image_rebinning(image,spectrum,rebinning_order,operation)
+function [image_out,spectrum_out] = RebinTOF(image,spectrum,rebinning_order,operation)
 %UNTITLED Summary of this function goes here
 %Detailed explanation goes here
 tof_n = size(image,3);

@@ -1,4 +1,4 @@
-function data_out = spatial_rebin(data_in,rows,columns,flag_mf)
+function data_out = RebinSpatial(data_in,rows,columns,flag_mf)
     Nx = size(data_in,1);
     Ny = size(data_in,2);
     Nx_out = floor(Nx/rows);

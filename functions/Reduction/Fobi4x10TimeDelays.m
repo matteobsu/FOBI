@@ -3,7 +3,7 @@ function [D] = Fobi4x10TimeDelays(time)
 %   Detailed explanation goes here
 Nt = length(time);
 angles = [7.579 13.316 18.1825 30.831 36.201 53.363 61.1375 67.332 76.674 87.573]-7.579;
-angles = [angles, angles+1*90, angles+2*90, angles+3*90]/360;
+angles = [angles]/90;
 shifts = Nt*angles;
 D = zeros(Nt,1); 
 for i = 1:length(shifts)
@@ -19,4 +19,3 @@ for i = 1:length(shifts)
 end
 % D = imgaussfilt(D,'Padding','circular');
 end
-
