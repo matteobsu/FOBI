@@ -1,4 +1,4 @@
-function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tmax,nrep,ChopperId,c,flag_smooth,roll)
+function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tmax,nrep,ChopperId,c,filter,roll,flag_smooth)
     %FULL_FOB_REDUCTION Summary of this function goes here
     %   Detailed explanation goes here
     if exist('roll','var') == 0
@@ -10,18 +10,32 @@ function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tma
     if exist('c','var') == 0
         c = 0.1;
     end
-    
-    method = 'rlowess';
-    sp = 0.0025;
+    if exist('filter','var') == 0
+        filter = 'LowPassBu';
+    end
+    %% reformat arrays
+    y = squeeze(y);
+    if(size(y,2)>1)
+        y=y';
+    end
+    y0 = squeeze(y0);
+    if(size(y0,2)>1)
+        y0=y0';
+    end
+    t = squeeze(t);
+    if(size(t,2)>1)
+        t=t';
+    end
+    %%
     if(flag_smooth)
+        method = 'rlowess';
+        sp = 0.0025;
         y = smooth(y,sp,method);
         y0 = smooth(y0,sp,method);
     end
-    
     pr = 0;
     [y0,t_merged] = interpolate_noreadoutgaps(y0,t,tmax,nrep,pr);
     [y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,pr);
-    
     %% choose time delays
     switch ChopperId
         case 'POLDI'
@@ -37,11 +51,10 @@ function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tma
             disp('Please select chopper')
     end
     %%
-    
-    yrec = nslits*nrep*wiener_deconvolution(y,D,c);
-    y0rec = nslits*nrep*wiener_deconvolution(y0,D,c);
+    yrec = nslits*nrep*wiener_deconvolution(y,D,c,filter);
+    y0rec = nslits*nrep*wiener_deconvolution(y0,D,c,filter);
     % Trec = yrec./y0rec; %direct T deconvolution seems to give heigher edges
-    Trec = nslits.*wiener_deconvolution(y./y0,D,c);
+    Trec = nslits.*wiener_deconvolution(y./y0,D,c,filter);
     
     % figure, plot(Trec)
     

@@ -1,4 +1,4 @@
-function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWienerRoipoly(I,I0,t,tmax,nrep,ChopperId,c,flag_smooth,roll)
+function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWienerRoipoly(I,I0,t,tmax,nrep,ChopperId,c,filter,roll,flag_smooth)
 %FULL_FOB_REDUCTION Summary of this function goes here
 %   Detailed explanation goes here
 if exist('roll','var') == 0
@@ -10,15 +10,18 @@ end
 if exist('c','var') == 0
     c = 0.1;
 end
+if exist('filter','var') == 0
+    filter = 'LowPassBu';
+end
 
 figure, imagesc(nanmean(I,3)./nanmean(I0,3)), title('Transmission Image'), caxis([0 1])
 roi = roipoly; 
 y0 = SpectrumRoi(I0,roi);
 y = SpectrumRoi(I,roi);
 
-method = 'rlowess';
-sp = 0.0025;
 if(flag_smooth)
+    method = 'rlowess';
+    sp = 0.0025;
     y = smooth(y,sp,method);
     y0 = smooth(y0,sp,method);
 end
@@ -43,14 +46,14 @@ pr = 0;
 end
 %%
 
-yrec = nslits*nrep*wiener_deconvolution(y,D,c);
-y0rec = nslits*nrep*wiener_deconvolution(y0,D,c);
+yrec = nslits*nrep*wiener_deconvolution(y,D,c,filter);
+y0rec = nslits*nrep*wiener_deconvolution(y0,D,c,filter);
 % Trec = yrec./y0rec; %direct T deconvolution seems to give heigher edges
-Trec = nslits.*wiener_deconvolution(y./y0,D,c);
+Trec = nslits.*wiener_deconvolution(y./y0,D,c,filter);
 
-yrec_merged = circshift(yrec_merged,roll);
-y0rec_merged = circshift(y0rec_merged,roll);
-Trec_merged = circshift(Trec_merged,roll);
+yrec_merged = circshift(yrec,roll);
+y0rec_merged = circshift(y0rec,roll);
+Trec_merged = circshift(Trec,roll);
 
 figure,
 subplot(2,1,1), plot(t_merged,y0rec_merged), hold on, plot(t_merged,yrec_merged),

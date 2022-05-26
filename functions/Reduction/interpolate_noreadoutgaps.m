@@ -10,20 +10,25 @@ function [y_merged,t_merged] = interpolate_noreadoutgaps(y,t,tmax,nrep,plot_flag
     if(size(t,2)>1)
         t=t';
     end
+    
     %% last bin is typically bad :(
     y(end)=[];
     t(end)=[];
-    
     %% get tof bin width, figure length and merge overlaps
     replen = ceil(length(y)/nrep);
     t_tot = linspace(t(1),tmax,nrep*replen);
     y_int = interp1(t,y,t_tot);
     y_overlap = zeros(replen,nrep);
     
-    for i=1:nrep
+    %interpolate here readout gap
+    y_int(end-length(y_int(isnan(y_int))):end)=0.5*y_int(replen-length(y_int(isnan(y_int))):replen)+0.5*y_int(3*replen-length(y_int(isnan(y_int))):3*replen);
+    
+    for i=1:(nrep)
         y_overlap(:,i) = y_int(replen*(i-1)+1:replen*i);
     end
     y_merged = nanmean(y_overlap,2);
+
+
     % y_merged = nanmedian(y_overlap,2); %% median gives more artifact. not a
     % good idea
     t_merged = t_tot(1:replen);

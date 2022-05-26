@@ -1,4 +1,4 @@
-function [T,y_rec,y0_rec,t_merged] = FobiWiener2D(I,I0,t,tmax,nrep,ChopperId,c,flag_smooth,roll)
+function [T,y_rec,y0_rec,t_merged] = FobiWiener2D(I,I0,t,tmax,nrep,ChopperId,c,filter,roll,flag_smooth)
 %FULL_FOB_REDUCTION Summary of this function goes here
 %   Detailed explanation goes here
 if exist('roll','var') == 0
@@ -9,6 +9,9 @@ if exist('flag_smooth','var') == 0
 end
 if exist('c','var') == 0
     c = 0.1;
+end
+if exist('filter','var') == 0
+    filter = 'LowPassBu';
 end
 
 siz = size(I);
@@ -36,9 +39,9 @@ for i=1:siz(1)
         y = squeeze(I(i,j,:));
         y0 = squeeze(I0(i,j,:));    
         
-        method = 'rlowess';
-        sp = 0.0025;
         if(flag_smooth)
+            method = 'rlowess';
+            sp = 0.0025;
             y = smooth(y,sp,method);
             y0 = smooth(y0,sp,method);
         end
@@ -46,10 +49,10 @@ for i=1:siz(1)
 		[y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
 		[y0,~] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
 
-        yrec = nslits*nrep*wiener_deconvolution(y,D,c);
-        y0rec = nslits*nrep*wiener_deconvolution(y0,D,c);
+        yrec = nslits*nrep*wiener_deconvolution(y,D,c,filter);
+        y0rec = nslits*nrep*wiener_deconvolution(y0,D,c,filter);
         % Trec = yrec./y0rec; %direct T deconvolution seems to give heigher edges
-        Trec = nslits*wiener_deconvolution(y./y0,D,c);
+        Trec = nslits*wiener_deconvolution(y./y0,D,c,filter);
         yrec_merged = circshift(yrec,roll);
         y0rec_merged = circshift(y0rec,roll);
         Trec_merged = circshift(Trec,roll);
