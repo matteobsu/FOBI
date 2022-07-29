@@ -1,4 +1,4 @@
-function [y_merged,t_merged] = interpolate_noreadoutgaps(y,t,tmax,nrep,plot_flag)
+function [y_merged,t_merged] = interpolate_noreadoutgaps_MCP(y,t,tmax,nrep,plot_flag)
     %INTERPOLATE_NOREADOUTGAPS Summary of this function goes here
     %   Detailed explanation goes here
     %% reformat arrays
@@ -26,8 +26,8 @@ function [y_merged,t_merged] = interpolate_noreadoutgaps(y,t,tmax,nrep,plot_flag
     for i=1:(nrep)
         y_overlap(:,i) = y_int(replen*(i-1)+1:replen*i);
     end
-     y_merged = nanmean(y_overlap,2);
-%    y_merged = nanmedian(y_overlap,2);
+%     y_merged = nanmean(y_overlap,2);
+    y_merged = nanmedian(y_overlap,2);
 
 
     % y_merged = nanmedian(y_overlap,2); %% median gives more artifact. not a

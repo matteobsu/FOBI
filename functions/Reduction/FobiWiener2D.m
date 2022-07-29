@@ -28,6 +28,9 @@ case '4x10'
 case '5x8'
     D = Fobi5x8TimeDelays(t_merged);
     nslits = 8;
+case '3x14'
+    D = Fobi3x14TimeDelays(t_merged);
+    nslits = 14;
 otherwise 
     disp('Please select chopper')
 end
