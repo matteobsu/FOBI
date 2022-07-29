@@ -6,7 +6,7 @@ if exist('cax','var') == 0
 end
 figure, imagesc(nanmean(I,3)), 
 if(cax)
-caxis(cax)
+    caxis(cax)
 end
 
 roi = roipoly;
