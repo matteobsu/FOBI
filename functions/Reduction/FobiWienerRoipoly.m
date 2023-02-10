@@ -61,8 +61,8 @@ Trec_merged = circshift(Trec,roll);
 
 figure,
 subplot(2,1,1), plot(t_merged,y0rec_merged), hold on, plot(t_merged,yrec_merged),
-legend('Open beam','Sample')
+legend('Open beam','Sample'), grid
 subplot(2,1,2), plot(t_merged,Trec_merged),
-legend('Transmission')
+legend('Transmission'), grid
 end
 

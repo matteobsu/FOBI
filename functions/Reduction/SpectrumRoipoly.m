@@ -5,7 +5,7 @@ if exist('cax','var') == 0
     cax = 0;
 end
 figure, imagesc(nanmean(I,3)), 
-if(cax)
+if(~isempty(cax))
     caxis(cax)
 end
 

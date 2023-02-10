@@ -39,6 +39,9 @@ pr = 0;
     case '5x8'
         D = Fobi5x8TimeDelays(t_merged);
         nslits = 8;
+    case '3x14'
+        D = Fobi3x14TimeDelays(t_merged);
+        nslits = 14;
     otherwise 
         disp('Please select chopper')
 end
@@ -59,6 +62,6 @@ figure(888),
 subplot(2,1,1), plot(t_merged,y0rec_merged), hold on, plot(t_merged,yrec_merged),
 legend('Open beam','Sample')
 subplot(2,1,2), plot(t_merged,Trec_merged),
-legend('Transmission')
+legend('Transmission'), grid
 end
 

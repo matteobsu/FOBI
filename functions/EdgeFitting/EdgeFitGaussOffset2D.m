@@ -1,4 +1,4 @@
-function [edge_p,edge_w,edge_h] = EdgeFitGaussOffset2D(data,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,mask,test)
+function [edge_p,edge_w,edge_h] = EdgeFitGaussOffset2D(data,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,mask,smooth_span,test)
     %EDGEGAUSSIAN Summary of this function goes here
     %   Detailed explanation goes here
     s = size(data);
@@ -8,13 +8,16 @@ function [edge_p,edge_w,edge_h] = EdgeFitGaussOffset2D(data,spectrum,spectrum_ra
     if exist('mask','var') == 0
         mask=ones(s);
     end
+    if exist('smooth_span','var') == 0
+        smooth_span=5;
+    end
     
     edge_p = zeros(s(1),s(2));
     edge_w = zeros(s(1),s(2));
     edge_h = zeros(s(1),s(2));
     
     if test
-        [p,w,h]=EdgeFitGaussOffset(squeeze(data(test(1),test(2),:)),spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,0,1)
+        [p,w,h]=EdgeFitGaussOffset(squeeze(data(test(1),test(2),:)),spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,smooth_span,1)
         return
     end
     
@@ -22,7 +25,7 @@ function [edge_p,edge_w,edge_h] = EdgeFitGaussOffset2D(data,spectrum,spectrum_ra
         disp(['Fitting row:' num2str(i) '/' num2str(s(1))])
         for j=1:s(2)
             if mask(i,j)==1
-                [a,b,c] = EdgeFitGaussOffset(squeeze(data(i,j,:)),spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,0,0);
+                [a,b,c] = EdgeFitGaussOffset(squeeze(data(i,j,:)),spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,smooth_span,0);
                 edge_p(i,j) = a;
                 edge_w(i,j) = b;
                 edge_h(i,j) = c;

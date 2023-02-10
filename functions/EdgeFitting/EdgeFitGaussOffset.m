@@ -1,22 +1,22 @@
-function [pos,wid,h] = EdgeFitGaussOffset(signal,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,flag_smooth,pr)
+function [pos,wid,h] = EdgeFitGaussOffset(signal,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,smooth_span,pr)
 %EDGEGAUSSIAN Summary of this function goes here
 %   Detailed explanation goes here
-if(nargin<10)
-    flag_smooth=1;
-end
-if(nargin<11)
+if exist('pr','var') == 0
     pr=0;
+end
+if exist('smooth_span','var') == 0
+    smooth_span=5;
 end
 %% prepare data
 d_spectrum = spectrum(1:end-1);
 if(pr)
     figure(998), plot(spectrum,signal),
 end
-if(flag_smooth)
-    signal = smooth(signal);
+if(smooth_span)
+    signal = smooth(signal,smooth_span);
 end
 if(pr)
-    figure(998),hold on, plot(spectrum,signal), grid
+    figure(998), hold on, plot(spectrum,signal), grid
 end
 
 % d_signal = smooth(diff(signal));
