@@ -11,6 +11,13 @@ if(numel(kernel)==2)
                 imageflt(:,:,ii) = conv2(image(:,:,ii),K,'same');
             end
 	
+            case 'movingaverage_NaN'
+            K = ones(kernel(1),kernel(2));
+            K = K./sum(K(:));
+            for ii=1:size(image,3)
+                imageflt(:,:,ii) = nanconv(image(:,:,ii),K,'same');
+                %imageflt(:,:,ii) = nanconv(image(:,:,ii),K,'nanout');
+            end
         case 'gaussianblur'
             for ii=1:size(image,3)
                 imageflt(:,:,ii) = imgaussfilt(image(:,:,ii),kernel);
