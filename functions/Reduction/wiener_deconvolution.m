@@ -21,7 +21,7 @@ G = fft(g);
 
 arg = F.*conj(G)./((abs(G).^2)+c);
 
-% complexplot(fftshift(arg));
+%complexplot(fftshift(arg));
 %%
 switch filter
     case 'LowPass'
