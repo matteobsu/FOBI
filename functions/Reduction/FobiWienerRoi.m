@@ -11,17 +11,16 @@ if exist('c','var') == 0
     c = 0.1;
 end
 if exist('filter','var') == 0
-    filter = 'LowPassBu';
+    filter = 'none';
 end
 
 y0 = SpectrumRoi(I0,roi);
 y = SpectrumRoi(I,roi);
 
 if(flag_smooth)
-    method = 'rlowess';
-    sp = 0.0025;
-    y = smooth(y,sp,method);
-    y0 = smooth(y0,sp,method);
+    sp = 3;
+    y = smooth(y,sp);
+    y0 = smooth(y0,sp);
 end
 
 pr = 0;

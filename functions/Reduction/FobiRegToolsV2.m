@@ -46,8 +46,9 @@ L2 = get_l(n,2);
 
 %%
 if(flag_smooth)
-    y = smooth(y);
-    y0 = smooth(y0);
+    sp = 3;
+    y = smooth(y,sp);
+    y0 = smooth(y0,sp);
 end
 % plot(t,y), hold on
 

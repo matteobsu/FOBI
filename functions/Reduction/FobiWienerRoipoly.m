@@ -11,7 +11,7 @@ if exist('c','var') == 0
     c = 0.1;
 end
 if exist('filter','var') == 0
-    filter = 'LowPassBu';
+    filter = 'none';
 end
 
 figure, imagesc(nanmean(I,3)./nanmean(I0,3)), title('Transmission Image'), caxis([0 1])
@@ -21,13 +21,12 @@ y0 = SpectrumRoi(I0,roi);
 y = SpectrumRoi(I,roi);
 
 if(flag_smooth)
-    method = 'rlowess';
-    sp = 0.0025;
-    y = smooth(y,sp,method);
-    y0 = smooth(y0,sp,method);
+    sp = 3;
+    y = smooth(y,sp);
+    y0 = smooth(y0,sp);
 end
 
-pr = 0;
+pr = 1;
 [y0,t_merged] = interpolate_noreadoutgaps(y0,t,tmax,nrep,pr);
 [y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,pr);
 
@@ -44,6 +43,7 @@ pr = 0;
         nslits = 8;
     case '3x14'
         D = Fobi3x14TimeDelays(t_merged);
+%         D = Fobi3x14TimeDelays_v2(t_merged);
         nslits = 14;
     otherwise 
         disp('Please select chopper')

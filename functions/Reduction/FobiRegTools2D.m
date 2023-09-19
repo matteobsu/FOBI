@@ -45,8 +45,9 @@ for i=1:siz(1)
 		[y,tn] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
 		[y0,tn] = interpolate_noreadoutgaps(y0,t,tmax,nrep,0);
         if(flag_smooth)
-			y = smooth(y);
-			y0 = smooth(y0);
+            sp = 3;
+            y = smooth(y,sp);
+            y0 = smooth(y0,sp);
 		end
 
 		b = tikhonov(U,s,V,y,lambda);

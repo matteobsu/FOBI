@@ -11,7 +11,7 @@ function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tma
         c = 0.1;
     end
     if exist('filter','var') == 0
-        filter = 'LowPassBu';
+        filter = 'none';
     end
     %% reformat arrays
     y = squeeze(y);
@@ -28,12 +28,11 @@ function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tma
     end
     %%
     if(flag_smooth)
-        method = 'rlowess';
-        sp = 0.0025;
-        y = smooth(y,sp,method);
-        y0 = smooth(y0,sp,method);
+        sp = 3;
+        y = smooth(y,sp);
+        y0 = smooth(y0,sp);
     end
-    pr = 0;
+    pr = 1;
     [y0,t_merged] = interpolate_noreadoutgaps(y0,t,tmax,nrep,pr);
     [y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,pr);
     %% choose time delays
@@ -47,6 +46,12 @@ function [Trec_merged,yrec_merged,y0rec_merged,t_merged] = FobiWiener(y,y0,t,tma
         case '5x8'
             D = Fobi5x8TimeDelays(t_merged);
             nslits = 8;
+        case '3x14'
+            D = Fobi3x14TimeDelays(t_merged);
+            nslits = 14;
+        case 'manual'
+            D = FobiManual(t_merged);
+            nslits = 42;
         otherwise 
             disp('Please select chopper')
     end

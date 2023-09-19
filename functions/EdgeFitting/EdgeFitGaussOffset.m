@@ -13,7 +13,7 @@ if(pr)
     figure(998), plot(spectrum,signal),
 end
 if(smooth_span)
-    signal = smooth(signal,smooth_span);
+    signal = smooth(signal,smooth_span,'sgolay');
 end
 if(pr)
     figure(998), hold on, plot(spectrum,signal), grid

@@ -1,4 +1,4 @@
-function [pos,wid,h] = EdgeFitGaussian(signal,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,pr)
+function [pos,wid,h] = EdgeFitGaussian(signal,spectrum,spectrum_range,est_p,est_w,est_h,BC_p,BC_w,BC_h,smooth_span,pr)
 %EDGEGAUSSIAN Summary of this function goes here
 %   Detailed explanation goes here
 if exist('pr','var') == 0
@@ -6,7 +6,10 @@ if exist('pr','var') == 0
 end
 %% prepare data
 d_spectrum = spectrum(1:end-1);
-d_signal = smooth(diff(signal));
+if(smooth_span)
+    signal = smooth(signal,smooth_span,'sgolay');
+end
+d_signal = diff(signal);
 x = d_spectrum(find_nearest(d_spectrum,spectrum_range(1)):find_nearest(d_spectrum,spectrum_range(2)));
 y = d_signal(find_nearest(d_spectrum,spectrum_range(1)):find_nearest(d_spectrum,spectrum_range(2)));
 x = squeeze(x)';

@@ -11,7 +11,7 @@ if exist('c','var') == 0
     c = 0.1;
 end
 if exist('filter','var') == 0
-    filter = 'LowPassBu';
+    filter = 'none';
 end
 
 siz = size(I);
@@ -43,10 +43,9 @@ for i=1:siz(1)
         y0 = squeeze(I0(i,j,:));    
         
         if(flag_smooth)
-            method = 'rlowess';
-            sp = 0.0025;
-            y = smooth(y,sp,method);
-            y0 = smooth(y0,sp,method);
+            sp = 3;
+            y = smooth(y,sp);
+            y0 = smooth(y0,sp);
         end
 
 		[y,~] = interpolate_noreadoutgaps(y,t,tmax,nrep,0);
