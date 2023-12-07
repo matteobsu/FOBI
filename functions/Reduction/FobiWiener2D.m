@@ -43,7 +43,7 @@ for i=1:siz(1)
         y0 = squeeze(I0(i,j,:));    
         
         if(flag_smooth)
-            sp = 3;
+            sp = flag_smooth;
             y = smooth(y,sp);
             y0 = smooth(y0,sp);
         end
